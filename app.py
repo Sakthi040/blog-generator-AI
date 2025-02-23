@@ -40,23 +40,23 @@ def generate_blog(title, keyword, length="medium"):
     return blog_content
 
 def save_as_pdf(title, blog_content):
-    """Generate a well-formatted PDF from the blog content."""
+    """Generate a well-formatted PDF from the blog content (Fix encoding issue)."""
     pdf = FPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
     
-    # Title Formatting
+    # Title Formatting (Fix Encoding)
     pdf.set_font("Arial", style="B", size=16)
-    pdf.multi_cell(0, 10, title, align="C")
+    pdf.multi_cell(0, 10, title.encode("latin1", "replace").decode("latin1"), align="C")
     pdf.ln(10)
 
-    # Body Formatting
+    # Body Formatting (Fix Encoding)
     pdf.set_font("Arial", size=12)
     for line in blog_content.split("\n"):
-        pdf.multi_cell(0, 10, line)
+        pdf.multi_cell(0, 10, line.encode("latin1", "replace").decode("latin1"))
 
     pdf_file = "blog.pdf"
-    pdf.output(pdf_file)
+    pdf.output(pdf_file, "F")  # Ensure proper file closing
     return pdf_file
 
 # Streamlit UI
